@@ -1,17 +1,16 @@
 // Get the Inputs-Entry
 function GetValues(){
-  let loanAmount =parseInt(document.getElementById('loanAmount').value);
+  //Get inputs
+  let loanAmount =parseFloat(document.getElementById('loanAmount').value);
   let termLength = parseInt(document.getElementById('termLength').value);
   let interestRate = parseFloat(document.getElementById('interestRate').value);
 
 
-  calculateTotals(loanAmount,interestRate,termLength);
-
+  CalculateTotals(loanAmount,interestRate,termLength);
 }
 
 // Calculate the results
-
-function calculateTotals(loanAmt, interest, termLength){
+function CalculateTotals(loanAmt, interest, termLength){
   let loanData=[];
  
   //Get Initial Values
@@ -20,7 +19,6 @@ function calculateTotals(loanAmt, interest, termLength){
   let currentInterest = 0;
   let totalInterest = 0;
   let balance = loanAmt;
-  let previousMonthsBalance = balance; 
 
   
   //loop through each month
@@ -38,17 +36,16 @@ function calculateTotals(loanAmt, interest, termLength){
       totalInterest:totalInterest,
       balance:balance
     }
-    previousMonthsBalance = monthlyData.balance;
     loanData.push(monthlyData);
 
   }
 
-  DisplayTotalResults(loanData,loanAmt);
+  DisplayTotalResults(loanData);
 
 }
 
 // Display Results
-function DisplayTotalResults(loanPmtData, loanAmount){
+function DisplayTotalResults(loanPmtData){
   let totalPrincipal = parseFloat(document.getElementById('loanAmount').value);
   let totalInterest = parseFloat(loanPmtData[loanPmtData.length-1].totalInterest);
   let totalCost = parseFloat(totalPrincipal)+parseFloat(totalInterest);
@@ -87,7 +84,6 @@ function DisplayTotalResults(loanPmtData, loanAmount){
     
   }
 }
-
 
 // Provided Formulas
 function CalculateTotalMonthlyPayment(amountLoaned, rate, numberOfMonths){

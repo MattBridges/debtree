@@ -81,23 +81,118 @@
         <div class="col-12 col-lg-8">
           <pre class="line-numbers">
       <code class="language-js">
-        function DisplayMessage(){
-          let msg = document.getElementById('message').value;
-          Swal.fire(
-            {
-              backdrop:false,
-              title:'Debtree',
-              text:msg
-            }
-          )
+        // Get the Inputs-Entry
+        function GetValues(){
+          //Get inputs
+          let loanAmount =parseInt(document.getElementById('loanAmount').value);
+          let termLength = parseInt(document.getElementById('termLength').value);
+          let interestRate = parseFloat(document.getElementById('interestRate').value);
+        
+        
+          CalculateTotals(loanAmount,interestRate,termLength);
         }
+        
+        // Calculate the results
+        function CalculateTotals(loanAmt, interest, termLength){
+          let loanData=[];
+         
+          //Get Initial Values
+          let payment = CalculateTotalMonthlyPayment(loanAmt,interest,termLength);
+          let currentPrincipal = 0;
+          let currentInterest = 0;
+          let totalInterest = 0;
+          let balance = loanAmt;
+        
+          
+          //loop through each month
+          for(let i=1;i<=termLength;i++){
+            currentInterest = CalculateInterestPayment(balance,interest);
+            currentPrincipal = payment-currentInterest;
+            totalInterest +=currentInterest;
+            balance -= currentPrincipal;
+        
+            let monthlyData = {
+              month:i,
+              payment:payment,
+              principal:currentPrincipal,
+              interest:currentInterest,
+              totalInterest:totalInterest,
+              balance:balance
+            }
+            loanData.push(monthlyData);
+        
+          }
+        
+          DisplayTotalResults(loanData);
+        
+        }
+        
+        // Display Results
+        function DisplayTotalResults(loanPmtData){
+          let totalPrincipal = parseFloat(document.getElementById('loanAmount').value);
+          let totalInterest = parseFloat(loanPmtData[loanPmtData.length-1].totalInterest);
+          let totalCost = parseFloat(totalPrincipal)+parseFloat(totalInterest);
+        
+          document.getElementById('totalPayment').textContent = parseFloat(loanPmtData[0].payment)
+            .toLocaleString('en-US', {style:'currency',currency:'USD'});
+          document.getElementById('totalPrincipal').textContent = totalPrincipal
+            .toLocaleString('en-US', {style:'currency',currency:'USD'});
+          document.getElementById('totalInterest').textContent = totalInterest
+            .toLocaleString('en-US', {style:'currency',currency:'USD'});
+          document.getElementById('totalCost').textContent = totalCost
+            .toLocaleString('en-US', {style:'currency',currency:'USD'});
+        
+        
+        
+          /*-------------------------Build Table--------------------------------*/
+          let resultsTable = document.getElementById('resultsTableBody');
+          const resultsRowTemplate = document.getElementById('resultsRowTemplate');
+        
+          //Clear the table
+          resultsTable.innerHTML='';
+        
+          //Loop through each payment to build the chart
+          for(let i = 0; i < loanPmtData.length; i++){
+           let resultsRow = document.importNode(resultsRowTemplate.content,true);
+           let currentMonth = loanPmtData[i];
+        
+            let resultCells = resultsRow.querySelectorAll('td');
+        
+            //Build row
+            resultCells[0].textContent = currentMonth.month;
+            resultCells[1].textContent= currentMonth.payment.toFixed(2);
+            resultCells[2].textContent=currentMonth.principal.toFixed(2);
+            resultCells[3].textContent=currentMonth.interest.toFixed(2);
+            resultCells[4].textContent=currentMonth.totalInterest.toFixed(2);
+            resultCells[5].textContent= Math.abs(currentMonth.balance).toFixed(2);
+        
+            //Append new row to the results table
+            resultsTable.appendChild(resultsRow);
+            
+          }
+        }
+        
+        // Provided Formulas
+        function CalculateTotalMonthlyPayment(amountLoaned, rate, numberOfMonths){
+          return (amountLoaned*(rate/1200))/(1-(1+rate/1200)**-numberOfMonths);
+        }
+        
+        function CalculateInterestPayment(previousRemainingBalance, rate){
+          return previousRemainingBalance*(rate/1200)
+        }
+        
+        
       </code>
     </pre>
         </div>
         <div class="col-12 col-lg-4">
-          <p>The code is structured in one function</p>
-          <h5><code>DisplayMessage()</code></h5>
-          <p>This function displays the message in a sweet alert</p>
+          <p>In this challange we were given formulas to break down the costs over the entire life of a loan.</p>
+          <h5><code class="code-writeup">GetValues()</code></h5>
+          <p>GetValues is our entry point where we get all of the input values and pass them to our function to calculate all of our date.</p>
+          <h5><code class="code-writeup">CalculateTotals()</code></h5>
+          <p>Once we get our inputs, we initialize an object to save all of our data to be displayed later.  We loop from month one till the input value for the loan term, creating an object for each month of the loan and pushing this monthly data into our loanData array.  Once we have finished calculating the data we hand it off to our display function that handles adding the data to the page.</p>
+          <h5><code class="code-writeup">DisplayTotalResults()</code></h5>
+          <p>Finaly after our data for the loan has been calculated we display it to the page. First we grab all of our needed elements in the page, then set the quick results card at the top of the page to the correct values, converting the values to display as US Dollar currency.  After the quick results card is done we create a table for the month by month breakdown of the loan.  To do this we loop through our loanData array and create a row that displays the data for each month object.  To ensure this is displays correctly we use <code>.toFixed(2)</code> on each of our data points rounding the calculated value to 2 decimal points.</p>
         </div>
       </div>
 

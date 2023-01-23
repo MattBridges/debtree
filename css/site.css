@@ -42,7 +42,14 @@ html,
    line-height: var(--mrb-line-height);
    color: var(--mrb-dark-color);
    background: var(--mrb-background-color);
+ }
 
+ .language-js{
+  font-size: .8rem !important;
+ }
+
+ .code-writeup{  
+  text-transform:none;
  }
 
  .nav-link.active{
