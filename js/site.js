@@ -80,7 +80,7 @@ function DisplayTotalResults(loanPmtData, loanAmount){
     resultCells[2].textContent=currentMonth.principal.toFixed(2);
     resultCells[3].textContent=currentMonth.interest.toFixed(2);
     resultCells[4].textContent=currentMonth.totalInterest.toFixed(2);
-    resultCells[5].textContent=currentMonth.balance.toFixed(2);
+    resultCells[5].textContent= Math.abs(currentMonth.balance).toFixed(2);
 
     //Append new row to the results table
     resultsTable.appendChild(resultsRow);
