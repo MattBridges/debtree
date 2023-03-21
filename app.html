@@ -77,13 +77,13 @@
         <div class="col border-end border-secondary border-2">
           <!-- inputs -->
           <label for="loanAmount" class="form-label pt-2">Loan Amount</label>
-          <input id="loanAmount" name="loanAmount" value="25000" class="form-control" type="number" min="0"
+          <input id="loanAmount" name="loanAmount" value="25000" class="form-control" type="number" min="0" oninput="validity.valid||(value='');"
             placeholder="Enter Loan Amount" aria-label="Loan Amount" required />
           <label for="termLength" class="form-label pt-2">Term(Months)</label>
-          <input id="termLength" value="60" name="termLength" class="form-control" type="number" min="0"
+          <input id="termLength" value="60" name="termLength" class="form-control" type="number" min="0" oninput="validity.valid||(value='');"
             placeholder="Enter Term Length" aria-label="Term Length" required />
           <label for="interestRate" class="form-label pt-2">Interest Rate(%)</label>
-          <input id="interestRate" value="5" name="interestRate" class="form-control" type="number" min="0"
+          <input id="interestRate" value="5" name="interestRate" class="form-control" type="number" min="0" oninput="validity.valid||(value='');"
             placeholder="Enter Interest Rate" aria-label="Interest Rare" required />
 
           <button onclick="GetValues()" class="btn btn-primary my-5 d-flex align-items-end">Calculate</button>
